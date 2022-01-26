@@ -16,6 +16,7 @@ header {
     top: 0;
     left: 0;
     right: 0;
+    z-index: 5;
 }
 
 /*Seção do main*/
@@ -37,9 +38,36 @@ main {
 .menu-cards {
     display: flex;
     flex-flow: row nowrap;
-    overflow: hidden;
     justify-content: space-between;
     align-items: center;
+    overflow-x: scroll;
+}
+
+.menu-cards > input {
+    opacity: 0;
+    height: 0;
+    width: 0;
+}
+
+input:checked + label > .menu-card {
+    box-shadow: inset 0px 0px 0px 5px #32B72F;
+    position: relative;
+}
+
+input:checked + label > .menu-card:after {
+    content: '';
+    background-image: url("../img/checked.svg");
+    background-size: cover;
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 15.44px;
+    width: 15.44px;
+    transform: translateX(-75%) translateY(-75%);
 }
 
 .menu-card {
@@ -54,6 +82,7 @@ main {
     flex-flow: column nowrap;
     justify-content: space-between;
     align-items: flex-start;
+    box-sizing: border-box;
 }
 
 .menu-card > img {
@@ -81,6 +110,7 @@ main {
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 5;
 }
 .confirmation-btn {
     background-color: #32b72f;
@@ -89,4 +119,18 @@ main {
     height: 100%;
     width: 100%;
     margin: auto;
+}
+
+.confirmation-btn:before {
+    content:'Fechar pedido'
+}
+
+.confirmation-btn:disabled {
+    background-color: #cbcbcb;
+}
+
+.confirmation-btn:disabled::before {
+    content:'Selecione os 3 itens para fechar o pedido';
+    font-weight: normal;
+    letter-spacing: 0.018em;
 }
