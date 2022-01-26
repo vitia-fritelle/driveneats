@@ -112,7 +112,7 @@ input:checked + label > .menu-card:after {
     right: 0;
     z-index: 5;
 }
-.confirmation-btn {
+#confirmation-btn {
     background-color: #32b72f;
     color: #fff;
     border-radius: 50px;
@@ -121,15 +121,15 @@ input:checked + label > .menu-card:after {
     margin: auto;
 }
 
-.confirmation-btn:before {
+#confirmation-btn:before {
     content:'Fechar pedido'
 }
 
-.confirmation-btn:disabled {
+#confirmation-btn:disabled {
     background-color: #cbcbcb;
 }
 
-.confirmation-btn:disabled::before {
+#confirmation-btn:disabled::before {
     content:'Selecione os 3 itens para fechar o pedido';
     font-weight: normal;
     letter-spacing: 0.018em;
