@@ -19,11 +19,16 @@
     font-style: normal;
     
 }
+
+/*Font-Sizes*/
 .fs-44 {
     font-size: 44px;
 }
 .fs-26 {
     font-size: 26px;
+}
+.fs-22 {
+    font-size: 22px;
 }
 .fs-20 {
     font-size: 20px;
@@ -37,11 +42,16 @@
 .fs-15 {
     font-size: 15px;
 }
+
+/*Line Heights*/
 .lh-55 {
     line-height: 55px;
 }
 .lh-32 {
     line-height: 32px;
+}
+.lh-26 {
+    line-height: 26px;
 }
 .lh-23 {
     line-height: 23px;
