@@ -1,42 +1,71 @@
 const MenuCard = {
     title:'',
-    price:''
+    price:0
 }
 
+var clientName;
+var clientAddress;
+
+/**
+ * Gets text result by prompt.
+ * @param {string} text 
+ * @returns {string}
+ */
 const getByPrompt = (text) => {
-    //getByPrompt(text:String) -> String
     const result = prompt(text);
     return result?result:'';
 };
 
+/**
+ * Gets the total price of the checked items
+ * @returns {number}
+ */
 const getTotal = () => getCheckedItemsProperties().reduce((acc, element) => {
-    //getTotal() -> number
     return acc+element.price
 },0);
 
+/**
+ * Gets an array with all the inputs of the document
+ * @returns {Array<HTMLElement>}
+ */
 const getInputs = () => Array.from(document.getElementsByTagName("input")); 
-    //getInputs() -> Array
 
+/**
+ * Gets an array with all the labels of the document
+ * @returns {Array<HTMLElement>}
+ */
 const getLabels = () => Array.from(document.getElementsByTagName("label"));
-    //getLabels() -> Array
 
+/**
+ * Gets a list of inputs that are checked
+ * @returns {Array<HTMLElement>}
+ */
 const getCheckedInputs = () => getInputs().filter(input => {
-    //getCheckedInputs -> Array
     return input.checked === true;
 });
-    
+
+/**
+ * Gets an array of labels associated with checked inputs
+ * @returns {Array<HTMLElement>}
+ */
 const getCheckedLabels = () => getCheckedInputs().map(checkedInput => {
-    //getCheckedLabels() -> Array
     return getLabels().filter(label => label.htmlFor === checkedInput.id)[0];
 });
-    
+
+/**
+ * Gets an array of items associated with checked inputs
+ * @returns {Array<HTMLElement>}
+ */
 const getCheckedItems = () => getCheckedLabels().map(label => {
-    //getCheckedItems() -> Array
     return Array.from(label.children[0].children);
 })
 
+/**
+ * Gets an array of items' properties title and price. The items are 
+ * associated with checked inputs
+ * @returns {Array<MenuCard>}
+ */
 const getCheckedItemsProperties = () => {
-    //getCheckedItemsProperties() -> Array[MenuCard]
     return getCheckedItems().map(card => {
         const aux = Object.create(MenuCard);
         const cardName = card.filter(element => {
@@ -51,14 +80,17 @@ const getCheckedItemsProperties = () => {
     });
 }
 
-//refatorar depois para alterar o innerHTML
-const setCheckedItemsListElement = () => {
-    //setCheckedItemsList() -> null
+/**
+ * Gets <ul> element which has an id="checked-items-list", and puts 
+ * price and name information of checked items inside its items' spans.
+ * @returns {null}
+ */
+const setElementCheckedItemsList = () => {
     const checkedItemsProperties = getCheckedItemsProperties();
     const checkedItemsList = document.getElementById("checked-items-list");
 
     Array.from(checkedItemsList.children).forEach((listItem,i,vector) => {
-        if (vector.length-1 == checkedItemsProperties.length){
+        if (vector.length-1 === checkedItemsProperties.length){
             Array.from(listItem.children).forEach((element,j) => {
                 if (i === vector.length-1) {
                     (j === 1) && (element.innerText = toMoneyForm(getTotal()));
@@ -74,8 +106,12 @@ const setCheckedItemsListElement = () => {
     return null;
 }
 
+/**
+ * Changes button's state from disabled to enabled when the  
+ * number of checked items gets to 3
+ * @returns {null}
+ */
 const setButtonState = () => {
-    //setButtonState() -> null
     const btn = document.getElementById('submit-btn')
     const numberCheckedItems = getCheckedInputs().length;
     if (numberCheckedItems === 3) {
@@ -83,12 +119,64 @@ const setButtonState = () => {
     } else {
         btn.disabled = true;
     }
-    setCheckedItemsListElement();
+    setElementCheckedItemsList();
     return null;
 };
 
+/**
+ * Submits the order, and brings the user to WhatsApp
+ * @returns {null}
+ */
+const submitOrder = () => {
+    sendOrder();
+    document.getElementById('send-to-whatsapp').href = makeWhatsAppLink();
+    return null
+};
 
-const setWhatsAppLink = () => {
+/**
+ * Changes the state of review order page. Switches between hidden, 
+ * and unconcealed.
+ * @returns {null}
+ */
+const toggleOrderReview = () => {
+    const state = document.getElementById("background-order-review").hidden;
+    document.getElementById("background-order-review").hidden = !state;
+    return null;
+};
+
+/**
+ * Sets clientName variable
+ * @return {null} 
+ */
+const setName = () => {
+    clientName = getByPrompt("Insira o seu nome: ")||'';
+    return null;
+}
+
+/**
+ * Sets clientAddress variable
+ * @return {null} 
+ */
+const setAddress = () => {
+    clientAddress = getByPrompt("Insira o seu endereço: ")||'';
+    return null;
+}
+
+//Utils
+/**
+ * Transform money value to two decimal places in portuguese format.
+ * @param {number} money [Money value]
+ * @return {string} [Money value with two decimal 
+ * places in portuguese format]
+ */
+const toMoneyForm = (money) => money.toFixed(2).replaceAll('.',',');
+
+/**
+ * 
+ * @returns {string} WhatsApp Link - Link that gets one to WhatsApp, with
+ * one's order and identification.
+ */
+const makeWhatsAppLink = () => {
     const properties = getCheckedItemsProperties();
     const message = `
     Olá, gostaria de fazer o pedido:
@@ -103,24 +191,9 @@ const setWhatsAppLink = () => {
     return `https://wa.me/${numero}?text=${encodeURIComponent(message)}`;
 }
 
-const sendOrder = () => null;
-
-const submitOrder = () => {
-    sendOrder();
-    document.getElementById('send-to-whatsapp').href = setWhatsAppLink();
-};
-
-const toggleOrderReview = () => {
-    //reviewOrder() -> null
-    const state = document.getElementById("background-order-review").hidden;
-    document.getElementById("background-order-review").hidden = !state;
-    return null;
-};
-
-const toMoneyForm = (money) => money.toFixed(2).replaceAll('.',',');
-
-var clientName = getByPrompt("Insira o seu nome: ")||'';
-var clientAddress = getByPrompt("Insira o seu endereço: ")||'';
-
-//Quando eu sou redirecionado, o site não carrega o estado do botão...
-//Tenho de ver como solucionar isso aqui...
+/**
+ * Ainda falta implementar. 
+ * Sends the order to the server
+ * @returns {null}
+ */
+ const sendOrder = () => null;
